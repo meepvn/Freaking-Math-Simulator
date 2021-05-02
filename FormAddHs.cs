@@ -26,7 +26,7 @@ namespace FreakingMath
                 MessageBox.Show("Maxium 10 letters");
                 return;
             }
-            SqlConnection connection = new SqlConnection("Data Source=DESKTOP-2K5RFTQ;Initial Catalog=FreakingMath;Integrated Security=True");
+            SqlConnection connection = new SqlConnection("Data Source=...;Initial Catalog=FreakingMath;Integrated Security=True");
             SqlCommand cmd = new SqlCommand("update HighScore set Name=@name,Score=@score,Time= CURRENT_TIMESTAMP where ID=(select top 1 ID from HighScore order by Score,Time)", connection);
             connection.Open();
             cmd.Parameters.AddWithValue("@name", txbName.Text);
