@@ -34,7 +34,7 @@ namespace FreakingMath
 
         private void btnReturn_Click(object sender, EventArgs e)
         {
-            Form1 f = new Form1();
+            formMain f = new formMain();
             f.Show();
             this.Close();
         }
