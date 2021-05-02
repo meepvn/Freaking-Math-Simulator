@@ -15,12 +15,6 @@ namespace FreakingMath
     {
         int score = -1,time;
         
-        void openMenu() {
-            formMain f = new formMain();
-            f.Show();
-            this.Close();
-        }
-        
         public FormGame()
         {
             InitializeComponent();
@@ -34,11 +28,6 @@ namespace FreakingMath
         }
         int calculateAnswer() {
             return lbOperation.Text =='+' ? int.Parse(lbNum1.Text) + int.Parse(lbNum2.Text) : int.Parse(lbNum1.Text) - int.Parse(lbNum2.Text);
-            /*
-            char ch = lbOperation.Text[0];
-            if (ch == '+') return int.Parse(lbNum1.Text) + int.Parse(lbNum2.Text);
-            return int.Parse(lbNum1.Text) - int.Parse(lbNum2.Text);
-            */
         }
         void showScore() {
             txbScore.Text = "Score: " + (++score);
@@ -55,7 +44,7 @@ namespace FreakingMath
         }
         
         public void gameOver() {
-            MessageBox.Show("Game over\nScore: "+score,"Message",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            MessageBox.Show("Game Over!\nScore: "+score,"Message",MessageBoxButtons.OK,MessageBoxIcon.Information);
             if (isHighScore())
             {
                 DialogResult DR = MessageBox.Show("Save your high score ?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
@@ -64,12 +53,10 @@ namespace FreakingMath
                     FormAddHs fAddHS = new FormAddHs();
                     fAddHS.lbHS.Text = score.ToString();
                     fAddHS.Show();
-                    this.Close();
                     return;
                 }
-                openMenu();
             }
-            else openMenu();
+            this.Close();
         }
         
         private void timer1_Tick(object sender, EventArgs e)
@@ -84,7 +71,8 @@ namespace FreakingMath
 
         private void FormGame_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Application.Exit();
+            formMain f = new formMain();
+            f.Show();
         }
         
         private void btnCorrect_Click(object sender, EventArgs e)
@@ -122,7 +110,7 @@ namespace FreakingMath
             {
                 num1 = rd.Next(1, 10);
                 num2 = rd.Next(1, 10);
-                if (num1 == num2) num2 = rd.Next(1, 10);
+                while (num1 == num2) num2 = rd.Next(1, 10);
             }
             else if (score >= 10 && score <= 20)
             {
@@ -145,8 +133,8 @@ namespace FreakingMath
             lbNum2.Text = num2.ToString();
             lbResult.Text = operation == 1 ? (num1 + num2).ToString() : (num1 - num2).ToString();
             if (!correct){
-                    int wrongAnswer = int.Parse(lbResult.Text) + rd.Next(1,3);
-                    lbResult.Text = wrongAnswer.ToString();
+                int wrongAnswer = int.Parse(lbResult.Text) + rd.Next(1,3);
+                lbResult.Text = wrongAnswer.ToString();
             }
         }
     }
