@@ -13,7 +13,7 @@ namespace FreakingMath
     public partial class FormHS : Form
     {
         private void loadLV() {
-            SqlConnection connection = new SqlConnection("Data Source=DESKTOP-2K5RFTQ;Initial Catalog=FreakingMath;Integrated Security=True");
+            SqlConnection connection = new SqlConnection("Data Source=...;Initial Catalog=FreakingMath;Integrated Security=True");
             SqlCommand cmd = new SqlCommand("select * from HighScore order by Score desc,Name", connection);
             connection.Open();
             SqlDataReader reader = cmd.ExecuteReader();
