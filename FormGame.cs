@@ -16,7 +16,7 @@ namespace FreakingMath
         int score = -1,time;
         Random rd = new Random();
         void openMenu() {
-            Form1 f = new Form1();
+            formMain f = new formMain();
             f.Show();
             this.Close();
         }
