@@ -7,21 +7,22 @@ namespace FreakingMath
         {
             InitializeComponent();
         }
-
+        public changingForm(){
+            isPlaying = true;
+            this.Close();
+        }
         private void btnPlay_Click(object sender, EventArgs e)
         {
             FormGame fGame = new FormGame();
             fGame.Show();
-            isPlaying = true;
-            this.Close();
+            changingForm();
         }
 
         private void btnHighScore_Click(object sender, EventArgs e)
         {
             FormHS fHS = new FormHS();
             fHS.Show();
-            isPlaying = true;
-            this.Close();
+            changingForm();
         }
 
         private void btnExit_Click(object sender, EventArgs e)
