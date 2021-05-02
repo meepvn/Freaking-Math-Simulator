@@ -38,5 +38,10 @@ namespace FreakingMath
             f.Show();
             this.Close();
         }
+        
+        private void FormHS_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }
