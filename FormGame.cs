@@ -14,13 +14,104 @@ namespace FreakingMath
     public partial class FormGame : Form
     {
         int score = -1,time;
-        Random rd = new Random();
+        
         void openMenu() {
             formMain f = new formMain();
             f.Show();
             this.Close();
         }
+        
+        public FormGame()
+        {
+            InitializeComponent();
+            showScore();
+            createEquation();
+            lbEqual.Text = "=";
+        }
+        
+        int setTime() {
+            return score <= 10 ? 3 : 2;
+        }
+        int calculateAnswer() {
+            return lbOperation.Text =='+' ? int.Parse(lbNum1.Text) + int.Parse(lbNum2.Text) : int.Parse(lbNum1.Text) - int.Parse(lbNum2.Text);
+            /*
+            char ch = lbOperation.Text[0];
+            if (ch == '+') return int.Parse(lbNum1.Text) + int.Parse(lbNum2.Text);
+            return int.Parse(lbNum1.Text) - int.Parse(lbNum2.Text);
+            */
+        }
+        void showScore() {
+            txbScore.Text = "Score: " + (++score);
+        }
+        bool isHighScore() {
+            SqlConnection connection = new SqlConnection("Data Source=...;Initial Catalog=FreakingMath;Integrated Security=True");
+            SqlCommand cmd = new SqlCommand("select min(score) from HighScore", connection);
+            connection.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            reader.Read();
+            int lowestScore = int.Parse(reader[0].ToString());
+            connection.Close();
+            return score > lowestScore ? true : false;
+        }
+        
+        public void gameOver() {
+            MessageBox.Show("Game over\nScore: "+score,"Message",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            if (isHighScore())
+            {
+                DialogResult DR = MessageBox.Show("Save your high score ?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (DR == DialogResult.Yes)
+                {
+                    FormAddHs fAddHS = new FormAddHs();
+                    fAddHS.lbHS.Text = score.ToString();
+                    fAddHS.Show();
+                    this.Close();
+                    return;
+                }
+                openMenu();
+            }
+            else openMenu();
+        }
+        
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (time == 0) {
+                timer1.Stop();
+                gameOver();
+            }
+            time--;
+            lbTime.Text = "Time: " + time.ToString();
+        }
+
+        private void FormGame_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+        
+        private void btnCorrect_Click(object sender, EventArgs e)
+        {
+            timer1.Start();
+            int result = calculateAnswer();
+            if (result != int.Parse(lbResult.Text)) {
+                timer1.Stop();
+                gameOver();
+            }
+            showScore();
+            createEquation();
+        }
+        
+        private void btnIncorrect_Click(object sender, EventArgs e)
+        {
+            timer1.Start();
+            int result = calculateAnswer();
+            if (result == int.Parse(lbResult.Text)) {
+                timer1.Stop();
+                gameOver();
+            }
+            showScore();
+            createEquation();
+        }
         void createEquation() {
+            Random rd = new Random();
             time = setTime();
             lbTime.Text = "Time: "+ time.ToString();
             bool correct = rd.Next(0, 2) == 1 ? true : false;
@@ -57,89 +148,6 @@ namespace FreakingMath
                     int wrongAnswer = int.Parse(lbResult.Text) + rd.Next(1,3);
                     lbResult.Text = wrongAnswer.ToString();
             }
-        }
-        int setTime() {
-            return score <= 10 ? 3 : 2;
-        }
-        int calculateAnswer() {
-            char ch = lbOperation.Text[0];
-            if (ch == '+') return int.Parse(lbNum1.Text) + int.Parse(lbNum2.Text);
-            return int.Parse(lbNum1.Text) - int.Parse(lbNum2.Text);
-        }
-        void showScore() {
-            txbScore.Text = "Score: " + (++score);
-        }
-        bool isHighScore() {
-            SqlConnection connection = new SqlConnection("Data Source=DESKTOP-2K5RFTQ;Initial Catalog=FreakingMath;Integrated Security=True");
-            SqlCommand cmd = new SqlCommand("select min(score) from HighScore", connection);
-            connection.Open();
-            SqlDataReader reader = cmd.ExecuteReader();
-            reader.Read();
-            int lowestScore = int.Parse(reader[0].ToString());
-            connection.Close();
-            return score > lowestScore ? true : false;
-        }
-        public FormGame()
-        {
-            InitializeComponent();
-            showScore();
-            createEquation();
-            lbEqual.Text = "=";
-        }
-        public void gameOver() {
-            MessageBox.Show("Game over\nScore: "+score,"Message",MessageBoxButtons.OK,MessageBoxIcon.Information);
-            if (isHighScore())
-            {
-                DialogResult DR = MessageBox.Show("Save your high score ?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                if (DR == DialogResult.Yes)
-                {
-                    FormAddHs fAddHS = new FormAddHs();
-                    fAddHS.lbHS.Text = score.ToString();
-                    fAddHS.Show();
-                    this.Close();
-                    return;
-                }
-                openMenu();
-            }
-            else openMenu();
-        }
-        private void btnCorrect_Click(object sender, EventArgs e)
-        {
-            timer1.Start();
-            int result = calculateAnswer();
-            if (result != int.Parse(lbResult.Text)) {
-                timer1.Stop();
-                gameOver();
-            }
-            showScore();
-            createEquation();
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            if (time == 0) {
-                timer1.Stop();
-                gameOver();
-            }
-            time--;
-            lbTime.Text = "Time: " + time.ToString();
-        }
-
-        private void FormGame_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void btnIncorrect_Click(object sender, EventArgs e)
-        {
-            timer1.Start();
-            int result = calculateAnswer();
-            if (result == int.Parse(lbResult.Text)) {
-                timer1.Stop();
-                gameOver();
-            }
-            showScore();
-            createEquation();
         }
     }
 }
