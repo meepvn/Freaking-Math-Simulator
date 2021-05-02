@@ -23,7 +23,7 @@ namespace FreakingMath
                 return;
             }
             if (txbName.TextLength > 10) {
-                MessageBox.Show("Maxium 10 letters");
+                MessageBox.Show("The maximum length is 10 letters");
                 return;
             }
             SqlConnection connection = new SqlConnection("Data Source=...;Initial Catalog=FreakingMath;Integrated Security=True");
@@ -34,7 +34,7 @@ namespace FreakingMath
             cmd.ExecuteNonQuery();
             connection.Close();
             
-            Form1 f = new Form1();
+            formMain f = new formMain();
             f.Show();
             this.Close();
         }
