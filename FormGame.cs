@@ -37,24 +37,26 @@ namespace FreakingMath
             {
                 num1 = rd.Next(10, 21);
                 num2 = rd.Next(10, 21);
-                if (num1 == num2) num2 = rd.Next(1, 21);
+                while (num1 == num2) num2 = rd.Next(1, 21);
             }
             else {
                 num1 = rd.Next(20, 31);
                 num2 = rd.Next(10, 31);
-                if (num1 == num2) num2 = rd.Next(10, 31);
+                while (num1 == num2) num2 = rd.Next(10, 31);
             }
             if (num1 < num2&&operation==0)
             {
-                int temp = num1;
-                num1 = num2;
-                num2 = temp;
+                num1 = num1 + num2;
+                num2 = num1 - num2;
+                num1 = num1 - num2;
             }
             lbNum1.Text = num1.ToString();
             lbNum2.Text = num2.ToString();
             lbResult.Text = operation == 1 ? (num1 + num2).ToString() : (num1 - num2).ToString();
-            if (!correct)
-                lbResult.Text = (int.Parse(lbResult.Text) + rd.Next(1, 3)).ToString();
+            if (!correct){
+                    int wrongAnswer = int.Parse(lbResult.Text) + rd.Next(1,3);
+                    lbResult.Text = wrongAnswer.ToString();
+            }
         }
         int setTime() {
             return score <= 10 ? 3 : 2;
